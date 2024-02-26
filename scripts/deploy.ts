@@ -2,12 +2,12 @@ import { ethers } from "hardhat";
 
 async function main() {
 
-  const contractName = await ethers.deployContract("ContactName", ["contructorValues"]);
+  const NFTMarketplace = await ethers.deployContract("NFTMarketplace");
 
-  await contractName.waitForDeployment();
+  await NFTMarketplace.waitForDeployment();
 
   console.log(
-    `contractName deployed to ${contractName.target}`
+    `NFTMarketplace deployed to ${NFTMarketplace.target}`
   );
 }
 
