@@ -2,16 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract NFTMarketplace is ERC721 {
-    using Counters for Counters.Counter;
-    Counters.Counter private idForToken;
+    uint count;
 
     struct NFT {
         uint256 id;
         address owner;
-        string YourNFTUrl;
+        string yourNFTUrl;
         uint256 amount;
         bool isAvailableForSale;
     }
@@ -36,20 +34,21 @@ contract NFTMarketplace is ERC721 {
         canUserMint[_userToMint] = false;
     }
 
-    function mintNFT(string memory _YourNFTUrl, uint256 _amount) external canMint {
-        idForToken.increment();
-        uint256 newNFTId = idForToken.current();
+    function mintNFT(string memory _yourNFTUrl, uint256 _amount) external canMint {
+        uint _id = count + 1;
+        uint256 newNFTId = _id;
         _mint(msg.sender, newNFTId);
 
         NFT memory newNFT = NFT({
             id: newNFTId,
             owner: msg.sender,
-            YourNFTUrl: _YourNFTUrl,
+            yourNFTUrl: _yourNFTUrl,
             amount: _amount,
             isAvailableForSale: false
         });
 
         NFTs[newNFTId] = newNFT;
+        count ++;
     }
 
     function buyNFT(uint256 _tokenId) external payable {
@@ -76,6 +75,6 @@ contract NFTMarketplace is ERC721 {
 
     function getNFT(uint256 _tokenId) external view returns (uint256, address, string memory, uint256, bool) {
         NFT memory nft = NFTs[_tokenId];
-        return (nft.id, nft.owner, nft.YourNFTUrl, nft.amount, nft.isAvailableForSale);
+        return (nft.id, nft.owner, nft.yourNFTUrl, nft.amount, nft.isAvailableForSale);
     }
 }
